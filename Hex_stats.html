@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Hexagrama Stats</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: transparent;
+    }
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="hexCanvas" width="600" height="600"></canvas>
+
+  <script>
+    const canvas = document.getElementById("hexCanvas");
+    const ctx = canvas.getContext("2d");
+
+    const cx = 300;
+    const cy = 300;
+    const maxRadius = 220; // Nivel 4 = hexágono más grande
+
+    const anglesDeg = [-90, -30, 30, 90, 150, -150]; // Orden: Fuerza, Destreza, etc.
+    const values = Array.from({ length: 6 }, () => Math.floor(Math.random() * 5)); // Niveles 0 a 4
+
+    // Calcular vértices del hexágono según valores
+    const points = values.map((value, i) => {
+      const angle = anglesDeg[i] * Math.PI / 180;
+      const radius = (value / 4) * maxRadius;
+      const x = cx + radius * Math.cos(angle);
+      const y = cy + radius * Math.sin(angle);
+      return { x, y };
+    });
+
+    // Dibujar el hexágono
+    ctx.beginPath();
+    ctx.moveTo(points[0].x, points[0].y);
+    for (let i = 1; i < points.length; i++) {
+      ctx.lineTo(points[i].x, points[i].y);
+    }
+    ctx.closePath();
+    ctx.fillStyle = "rgba(0, 150, 255, 0.3)";
+    ctx.fill();
+    ctx.strokeStyle = "#00ccff";
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    // Dibujar líneas desde el centro
+    ctx.strokeStyle = "rgba(255,255,255,0.2)";
+    for (let pt of points) {
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(pt.x, pt.y);
+      ctx.stroke();
+    }
+  </script>
+</body>
+</html>
